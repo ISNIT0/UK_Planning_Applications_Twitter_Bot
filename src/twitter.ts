@@ -12,7 +12,7 @@ export async function tweetApplications(applications: any[]) {
 
     for (const application of applications) {
         T.post('statuses/update', {
-            status: application.description + '\n' + application.url,
+            status: `${application.authority_name}: ` + application.description.slice(0, 100) + '\n' + application.link,
             lat: application.lat,
             long: application.lng,
         }, (err) => {
