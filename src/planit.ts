@@ -2,11 +2,12 @@ import { readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import requestPromise from 'request-promise-native';
 const appLockPath = join(__dirname, '../.applicationlock');
+const SIXTY_MINUTES = 1000 * 60 * 60;
 
 try {
     readFileSync(appLockPath);
 } catch {
-    writeFileSync(appLockPath, 0, 'utf8');
+    writeFileSync(appLockPath, Date.now() - SIXTY_MINUTES, 'utf8');
 }
 
 export async function getLatestApplications() {
