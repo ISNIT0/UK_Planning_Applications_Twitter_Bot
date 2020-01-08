@@ -23,7 +23,7 @@ export async function tweetApplications(applications: any[]) {
                     ]
                 }
             ];
-            const imageUrl = `http://osm-static-maps.herokuapp.com/?geojson=${JSON.stringify(imageJSON)}&height=150&width=300&zoom=11`;
+            const imageUrl = `http://osm-static-maps.herokuapp.com/?geojson=${JSON.stringify(imageJSON)}&height=300&width=600&zoom=11`;
             const imageBody = await requestPromise.get({ encoding: null, url: imageUrl });
             const imageB64 = imageBody.toString('base64');
             const resp: any = await T.post('media/upload', { media_data: imageB64 });
@@ -32,7 +32,7 @@ export async function tweetApplications(applications: any[]) {
 
         try {
             await T.post('statuses/update', {
-                status: `${application.authority_name}: ` + application.description.slice(0, 100) + '\n' + application.link,
+                status: `${application.authority_name}: ` + (application.description || '').slice(0, 100) + '\n' + application.link,
                 lat: application.lat,
                 long: application.lng,
                 media_ids: mediaId ? [mediaId] : [],
