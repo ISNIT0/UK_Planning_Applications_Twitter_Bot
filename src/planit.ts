@@ -1,13 +1,14 @@
 import { readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import requestPromise from 'request-promise-native';
+import moment from 'moment';
 const appLockPath = join(__dirname, '../.applicationlock');
 const SIXTY_MINUTES = 1000 * 60 * 60;
 
 try {
     readFileSync(appLockPath);
 } catch {
-    writeFileSync(appLockPath, Date.now() - SIXTY_MINUTES, 'utf8');
+    writeFileSync(appLockPath, moment.utc().valueOf() - SIXTY_MINUTES, 'utf8');
 }
 
 export async function getLatestApplications() {
@@ -19,9 +20,9 @@ export async function getLatestApplications() {
     const recentApplications = applications
         .records
         .filter((app: any) => {
-            return (new Date(app.when_updated)).valueOf() > appLock;
+            return moment(app.when_updated).utc().valueOf() > appLock;
         });
 
-    writeFileSync(appLockPath, Date.now(), 'utf8');
+    writeFileSync(appLockPath, moment.utc().valueOf(), 'utf8');
     return recentApplications;
 }
