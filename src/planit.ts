@@ -23,6 +23,8 @@ export async function getLatestApplications() {
             return moment(app.when_updated).utc().valueOf() > appLock;
         });
 
-    writeFileSync(appLockPath, moment.utc().valueOf(), 'utf8');
+    if (recentApplications.length) {
+        writeFileSync(appLockPath, moment.utc().valueOf(), 'utf8');
+    }
     return recentApplications;
 }
