@@ -3,7 +3,7 @@ import { join } from 'path';
 import requestPromise from 'request-promise-native';
 import moment from 'moment';
 const appLockPath = join(__dirname, '../.applicationlock');
-const SIXTY_MINUTES = 1000 * 60 * 60;
+const SIXTY_MINUTES = 1000 * 60 * 60 * 20;
 
 try {
     readFileSync(appLockPath);
@@ -24,6 +24,7 @@ export async function getLatestApplications() {
         });
 
     if (recentApplications.length) {
+        console.log(`Updating Application Lock`);
         writeFileSync(appLockPath, moment.utc().valueOf(), 'utf8');
     }
     return recentApplications;
